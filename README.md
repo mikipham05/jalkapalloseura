@@ -1,4 +1,4 @@
-#Jalkapalloseura
+Jalkapalloseura
 
 Tämän hetkiset toiminnot:
 * Sovelluksessa käyttäjät pystyvät etsimään peliseuraa Jalkapalloon.
@@ -8,10 +8,15 @@ Tämän hetkiset toiminnot:
 * Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
 
 
-Sovelluksen asennus ohjeet alla: 
+Sovelluksen testausohjeet alla: 
 
-Asenna flask-kirjasto : $ pip install flask
+* Kirjoita terminaaliin git clone https://github.com/mikipham05/jalkapalloseura
+* cd jalkapalloseura
 
-Luo tietokannan taulut: $ sqlite3 database.db < schema.sql
+* Asenna flask-kirjasto : $ pip install flask
 
-Käynnistä sovellus: $ flask run
+* Luo tietokannan taulut: $ sqlite3 database.db < schema.sql
+
+* Käynnistä sovellus: $ flask run
+
+* Lopuksi mene sivulle joka annetaan

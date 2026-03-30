@@ -7,10 +7,16 @@
 
 <body>
   <h1>{{ item.title }}</hl>
+  {% if session.user_id == item.user_id %}
+  <p>
+    <a href = "/edit_item/{{ item.id }}">Muokkaa</a>
+  </p>
+  {% endif %}
   <p>
     {{ item. description}}
     </p>
-    <p> Vuoron alkamisaika: klo {{ item.start_time }}
+    <p>
+      Vuoron alkamisaika: klo {{ item.start_time }}
     </p>
     <p>
       ilmoittaja: {{ item.username }}

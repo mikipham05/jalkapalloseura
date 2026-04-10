@@ -2,28 +2,30 @@
 <html>
 
 <head>
-  <title>{{ item.title}}</title>
+  <title>{{ item.title }}</title>
 </head>
 
 <body>
-  <h1>{{ item.title }}</hl>
+  <h1>{{ item.title }}</h1>
   {% if session.user_id == item.user_id %}
   <p>
-    <a href = "/edit_item/{{ item.id }}">Muokkaa</a>
+    <a href="/edit_item/{{ item.id }}">Muokkaa</a>
   </p>
+  <form action="/delete_item" method="post" style="display:inline;">
+    <input type="hidden" name="item_id" value="{{ item.id }}" />
+    <button type="submit">Poista ilmoitus</button>
+  </form>
   {% endif %}
   <p>
-    {{ item. description}}
-    </p>
-    <p>
-      Vuoron alkamisaika: klo {{ item.start_time }}
-    </p>
-    <p>
-      ilmoittaja: {{ item.username }}
-    </p>
-    <p>
-      <a href ="/"> Takaisin</a>
-    </p>
+    {{ item.description }}
+  </p>
+  <p>
+    Vuoron alkamisaika: klo {{ item.start_time }}
+  </p>
+  <p>
+    Ilmoittaja: {{ item.username }}
+  </p>
+  <p><a href="/">Takaisin</a></p>
 </body>
 
 </html>

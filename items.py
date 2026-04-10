@@ -11,19 +11,31 @@ def get_items():
     return db.query(sql)
 
 def get_item(item_id):
-    sql= """SELECT items.id,
+    sql = """SELECT items.id,
                    items.title,
                    items.description,
                    items.start_time,
-                   users.id user_id,
+                   users.id AS user_id,
                    users.username
-            FROM items, users
-            WHERE items.user_id = users.id AND
-                  items.id = ?"""
-    return db.query(sql, [item_id]) [0]
+            FROM items
+            JOIN users ON items.user_id = users.id
+            WHERE items.id = ?"""
+    results = db.query(sql, [item_id])
+    return results[0] if results else None
 
-def update_item(item_id, title, description):
-    sql = """ UPDATE items SET title = ?,
-                               description = ?,
-                            WHERE id= ? """
-    db.execute( sql, [title, description, item_id])
+def update_item(item_id, title, description, start_time=None):
+    if start_time is None:
+        sql = """UPDATE items SET title = ?,
+                                   description = ?
+                 WHERE id = ?"""
+        db.execute(sql, [title, description, item_id])
+    else:
+        sql = """UPDATE items SET title = ?,
+                                   description = ?,
+                                   start_time = ?
+                 WHERE id = ?"""
+        db.execute(sql, [title, description, start_time, item_id])
+
+def delete_item(item_id):
+    sql = "DELETE FROM items WHERE id = ?"
+    db.execute(sql, [item_id])

@@ -4,7 +4,7 @@ Tämän hetkiset toiminnot:
 * Sovelluksessa käyttäjät pystyvät etsimään peliseuraa Jalkapalloon.
 * Ilmoituksessa lukee missä ja milloin pelivuoro on sekä tarvittava pelaajien määrä.
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sekä ulos sovelluksesta.
-* Käyttäjä pystyy lisäämään ilmoituksia ja muokkaamaan niitä.
+* Käyttäjä pystyy lisäämään ilmoituksia, poistamaan ja muokkaamaan niitä.
 * Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
 
 

@@ -10,8 +10,9 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    all_items = items.get_items()
-    return render_template("index.html", items=all_items)
+    query = request.args.get("q", "").strip()
+    all_items = items.get_items(query)
+    return render_template("index.html", items=all_items, query=query)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
@@ -151,3 +152,5 @@ def logout():
     session.pop("user_id", None)
     session.pop("username", None)
     return redirect("/")
+
+

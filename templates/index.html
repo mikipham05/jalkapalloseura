@@ -30,7 +30,17 @@
   <p>Kirjaudu sisään, jotta voit lisätä ilmoituksen.</p>
   {% endif %}
 
+  <form action="/" method="get">
+    <p>
+      Haku: <input type="text" name="q" value="{{ query }}" />
+      <input type="submit" value="Hae" />
+    </p>
+  </form>
+
   <h2>Ilmoitukset</h2>
+   {% if query and not items %}
+  <p>Hakuehdolla ei löytynyt tuloksia.</p>
+  {% endif %}
   <ul>
     {% for item in items %}
     <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>

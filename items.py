@@ -5,10 +5,16 @@ def add_item(title, description, start_time, user_id):
              VALUES (?, ?, ?, ?)"""
     db.execute(sql, [title, description, start_time, user_id])
 
-def get_items():
-    sql = "SELECT id, title FROM items ORDER BY id DESC"
+def get_items(search_term=None):
+    if not search_term:
+        sql = "SELECT id, title FROM items ORDER BY id DESC"
+        return db.query(sql)
 
-    return db.query(sql)
+    sql = """SELECT id, title FROM items
+             WHERE title LIKE ? OR description LIKE ? OR start_time LIKE ?
+             ORDER BY id DESC"""
+    wildcard = f"%{search_term}%"
+    return db.query(sql, [wildcard, wildcard, wildcard])
 
 def get_item(item_id):
     sql = """SELECT items.id,

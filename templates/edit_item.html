@@ -17,6 +17,10 @@
       <textarea name="description" rows="8" cols="60">{{ item.description }}</textarea>
     </p>
     <p>
+      Päivämäärä: <br />
+      <input type="date" name="event_date" value="{{ item.event_date }}" />
+    </p>
+    <p>
       Pelivuoron aika: <br />
       klo: <input type="text" name="start_time" size="10" value="{{ item.start_time }}" />
     </p>

@@ -8,6 +8,7 @@ CREATE TABLE items (
     id INTEGER PRIMARY KEY,
     title TEXT,
     description TEXT,
-    start_time INTEGER,
+    event_date TEXT,
+    start_time TEXT,
     user_id INTEGER REFERENCES users
 );

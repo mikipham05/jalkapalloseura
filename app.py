@@ -34,12 +34,13 @@ def create_item():
 
     title = request.form.get("title", "").strip()
     description = request.form.get("description", "").strip()
+    event_date = request.form.get("event_date", "").strip()
     start_time = request.form.get("start_time", "").strip()
 
     if not title:
         return "VIRHE: otsikko vaaditaan", 400
 
-    items.add_item(title, description, start_time, session["user_id"])
+    items.add_item(title, description, event_date, start_time, session["user_id"])
     return redirect("/")
 
 @app.route("/edit_item/<int:item_id>")
@@ -64,6 +65,7 @@ def update_item():
     item_id = request.form.get("item_id")
     title = request.form.get("title", "").strip()
     description = request.form.get("description", "").strip()
+    event_date = request.form.get("event_date", "").strip()
     start_time = request.form.get("start_time", "").strip()
 
     if not item_id:
@@ -76,7 +78,7 @@ def update_item():
     if item["user_id"] != session["user_id"]:
         return "Ei oikeuksia muokata tätä ilmoitusta", 403
 
-    items.update_item(item_id, title, description, start_time or None)
+    items.update_item(item_id, title, description, event_date or None, start_time or None)
     return redirect("/item/" + str(item_id))
 
 @app.route("/delete_item", methods=["POST"])
@@ -152,5 +154,4 @@ def logout():
     session.pop("user_id", None)
     session.pop("username", None)
     return redirect("/")
-
 

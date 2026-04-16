@@ -2,3 +2,5 @@ __pycache__
 vemv
 venv
 database.db
+.database.db
+

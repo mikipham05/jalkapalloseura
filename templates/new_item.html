@@ -21,6 +21,15 @@
       <input type="date" name="event_date" />
     </p>
     <p>
+      Kategoria: <br />
+      <select name="category">
+        <option value="">Valitse kategoria</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
       Pelivuoron aika: <br />
       klo: <input type="text" name="start_time" size="10" />
     </p>

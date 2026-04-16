@@ -4,6 +4,7 @@ from flask import g
 def get_connection():
     con = sqlite3.connect("database.db")
     con.execute("PRAGMA foreign_keys = ON")
+    con.execute("PRAGMA busy_timeout = 5000")
     con.row_factory = sqlite3.Row
     return con
 

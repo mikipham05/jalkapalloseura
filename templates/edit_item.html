@@ -21,6 +21,15 @@
       <input type="date" name="event_date" value="{{ item.event_date }}" />
     </p>
     <p>
+      Kategoria: <br />
+      <select name="category">
+        <option value="">Valitse kategoria</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
       Pelivuoron aika: <br />
       klo: <input type="text" name="start_time" size="10" value="{{ item.start_time }}" />
     </p>

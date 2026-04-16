@@ -19,13 +19,60 @@ def show_item(item_id):
     item = items.get_item(item_id)
     if item is None:
         abort(404)
-    return render_template("show_item.html", item=item)
+    comments = items.get_comments(item_id)
+    response_counts = items.get_response_counts(item_id)
+    current_response = None
+    if "user_id" in session:
+        current_response = items.get_user_response(item_id, session["user_id"])
+    return render_template("show_item.html", item=item, comments=comments, response_counts=response_counts, current_response=current_response)
+
+@app.route("/item/<int:item_id>/comment", methods=["POST"])
+def add_item_comment(item_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    item = items.get_item(item_id)
+    if item is None:
+        abort(404)
+
+    content = request.form.get("content", "").strip()
+    if content:
+        items.add_comment(item_id, session["user_id"], content)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/item/<int:item_id>/response", methods=["POST"])
+def add_item_response(item_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    item = items.get_item(item_id)
+    if item is None:
+        abort(404)
+
+    response = request.form.get("response")
+    if response in ["IN", "OUT"]:
+        items.set_user_response(item_id, session["user_id"], response)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/user/<username>")
+def user_page(username):
+    user = items.get_user_by_username(username)
+    if user is None:
+        abort(404)
+
+    user_items = items.get_items_by_user(user["id"])
+    stats = items.get_user_stats(user["id"])
+    return render_template("user.html", user=user, items=user_items, stats=stats)
 
 @app.route("/new_item")
 def new_item():
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("new_item.html")
+
+    categories = items.get_categories()
+    return render_template("new_item.html", categories=categories)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
@@ -36,11 +83,13 @@ def create_item():
     description = request.form.get("description", "").strip()
     event_date = request.form.get("event_date", "").strip()
     start_time = request.form.get("start_time", "").strip()
+    category_id = request.form.get("category")
 
     if not title:
         return "VIRHE: otsikko vaaditaan", 400
 
-    items.add_item(title, description, event_date, start_time, session["user_id"])
+    category_ids = [category_id] if category_id else []
+    items.add_item(title, description, event_date, start_time, session["user_id"], category_ids)
     return redirect("/")
 
 @app.route("/edit_item/<int:item_id>")
@@ -55,7 +104,10 @@ def edit_item(item_id):
     if item["user_id"] != session["user_id"]:
         return "Ei oikeuksia muokata tätä ilmoitusta", 403
 
-    return render_template("edit_item.html", item=item)
+    categories = items.get_categories()
+    selected_category_ids = items.get_item_category_ids(item_id)
+    selected_category_id = selected_category_ids[0] if selected_category_ids else None
+    return render_template("edit_item.html", item=item, categories=categories, selected_category_id=selected_category_id)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -67,6 +119,7 @@ def update_item():
     description = request.form.get("description", "").strip()
     event_date = request.form.get("event_date", "").strip()
     start_time = request.form.get("start_time", "").strip()
+    category_id = request.form.get("category")
 
     if not item_id:
         return "VIRHE: ilmoituksen id puuttuu", 400
@@ -78,7 +131,8 @@ def update_item():
     if item["user_id"] != session["user_id"]:
         return "Ei oikeuksia muokata tätä ilmoitusta", 403
 
-    items.update_item(item_id, title, description, event_date or None, start_time or None)
+    category_ids = [category_id] if category_id else []
+    items.update_item(item_id, title, description, event_date or None, start_time or None, category_ids)
     return redirect("/item/" + str(item_id))
 
 @app.route("/delete_item", methods=["POST"])

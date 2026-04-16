@@ -23,11 +23,50 @@
     Päivämäärä: {{ item.event_date }}
   </p>
   <p>
+    Kategoria: {% if item.categories %}{{ item.categories[0] }}{% else %}Ei luokituksia.{% endif %}
+  </p>
+  <p>
+    Vastaukset: In {{ response_counts.in_count }} / Out {{ response_counts.out_count }}
+  </p>
+  {% if session.user_id %}
+  <form action="/item/{{ item.id }}/response" method="post">
+    <p>
+      Osallistuja määrä: <br />
+      <label><input type="radio" name="response" value="IN" {% if current_response == 'IN' %}checked{% endif %}> In</label>
+      <label><input type="radio" name="response" value="OUT" {% if current_response == 'OUT' %}checked{% endif %}> Out</label>
+    </p>
+    <input type="submit" value="Tallenna vastaus" />
+  </form>
+  {% else %}
+  <p><a href="/login">Kirjaudu sisään</a> nähdäksesi osallistumisen tilan.</p>
+  {% endif %}
+  <p>
     Vuoron alkamisaika: klo {{ item.start_time }}
   </p>
   <p>
-    Ilmoittaja: {{ item.username }}
+    Ilmoittaja: <a href="/user/{{ item.username }}">{{ item.username }}</a>
   </p>
+  <h3>Kommentit:</h3>
+  {% if comments %}
+  <ul>
+    {% for comment in comments %}
+    <li><strong>{{ comment.username }}</strong> ({{ comment.created_at }}): {{ comment.content }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Ei lisätietoja.</p>
+  {% endif %}
+  {% if session.user_id %}
+  <form action="/item/{{ item.id }}/comment" method="post">
+    <p>
+      Lisää kommentti:<br />
+      <textarea name="content" rows="4" cols="60"></textarea>
+    </p>
+    <input type="submit" value="Lähetä lisätieto" />
+  </form>
+  {% else %}
+  <p><a href="/login">Kirjaudu sisään</a> lisätietojen lisäämiseen.</p>
+  {% endif %}
   <p><a href="/">Takaisin</a></p>
 </body>
 

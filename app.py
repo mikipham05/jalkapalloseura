@@ -56,6 +56,42 @@ def add_item_response(item_id):
 
     return redirect("/item/" + str(item_id))
 
+@app.route("/comment/<int:comment_id>/edit", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    comment = items.get_comment_by_id(comment_id)
+    if comment is None:
+        abort(404)
+
+    if comment["user_id"] != session["user_id"]:
+        return "Ei oikeuksia muokata tätä kommenttia", 403
+
+    if request.method == "POST":
+        content = request.form.get("content", "").strip()
+        if not content:
+            return "Kommentti ei voi olla tyhjä", 400
+        items.update_comment(comment_id, content)
+        return redirect("/item/" + str(comment["item_id"]))
+
+    return render_template("edit_comment.html", comment=comment)
+
+@app.route("/comment/<int:comment_id>/delete", methods=["POST"])
+def delete_comment(comment_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    comment = items.get_comment_by_id(comment_id)
+    if comment is None:
+        abort(404)
+
+    if comment["user_id"] != session["user_id"]:
+        return "Ei oikeuksia poistaa tätä kommenttia", 403
+
+    items.delete_comment(comment_id)
+    return redirect("/item/" + str(comment["item_id"]))
+
 @app.route("/user/<username>")
 def user_page(username):
     user = items.get_user_by_username(username)
@@ -208,4 +244,5 @@ def logout():
     session.pop("user_id", None)
     session.pop("username", None)
     return redirect("/")
+
 

@@ -106,6 +106,22 @@ def add_comment(item_id, user_id, content):
     db.execute(sql, [item_id, user_id, content])
 
 
+def get_comment_by_id(comment_id):
+    sql = "SELECT id, item_id, user_id, content FROM comments WHERE id = ?"
+    results = db.query(sql, [comment_id])
+    return dict(results[0]) if results else None
+
+
+def update_comment(comment_id, content):
+    sql = "UPDATE comments SET content = ? WHERE id = ?"
+    db.execute(sql, [content, comment_id])
+
+
+def delete_comment(comment_id):
+    sql = "DELETE FROM comments WHERE id = ?"
+    db.execute(sql, [comment_id])
+
+
 def get_user_by_username(username):
     sql = "SELECT id, username FROM users WHERE username = ?"
     results = db.query(sql, [username])

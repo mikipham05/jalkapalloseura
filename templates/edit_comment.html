@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Muokkaa kommenttia</title>
+</head>
+
+<body>
+  <h1>Muokkaa kommenttia</h1>
+  <form action="/comment/{{ comment.id }}/edit" method="post">
+    <p>
+      Kommentti:<br />
+      <textarea name="content" rows="6" cols="60">{{ comment.content }}</textarea>
+    </p>
+    <input type="submit" value="Päivitä kommentti" />
+  </form>
+  <p><a href="/item/{{ comment.item_id }}">Takaisin ilmoitukseen</a></p>
+</body>
+
+</html>

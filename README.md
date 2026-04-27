@@ -2,11 +2,12 @@ Jalkapalloseura
 
 Tämän hetkiset toiminnot:
 * Sovelluksessa käyttäjät pystyvät etsimään peliseuraa Jalkapalloon.
-* Ilmoituksessa lukee missä ja milloin pelivuoro on sekä tarvittava pelaajien määrä.
+* Ilmoituksessa lukee missä ja milloin pelivuoro on sekä tarvittava pelaajien määrä ja kategoria siitä millainen kyseinen tapahtuma on.
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sekä ulos sovelluksesta.
 * Käyttäjä pystyy lisäämään ilmoituksia, poistamaan ja muokkaamaan niitä.
 * Käyttäjä pystyy lisäämään kommentteja, muokkaamaan ja poistamaan niitä ilmoituksissa ja näkemään muiden kommentteja.
-* Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
+* Käyttäjä näkee sovellukseen lisätyt ilmoitukset ja pystyy suodattamaan niitä haluamansa kategorian mukaan.
+* Hakutoiminto jolla voi etsiä haluamalla hakusanalla tai kategorialla.
 * Käyttäjä pystyy ilmoittautumaan mukaan johonkin ilmoitukseen ja nähdä kuinka monta muuta on ilmoittautunut mukaan tai pois.
 
 

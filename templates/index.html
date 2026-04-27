@@ -54,6 +54,12 @@
   <form action="/" method="get">
     <p>
       Haku: <input type="text" name="q" value="{{ query }}" />
+      Kategoria: <select name="category">
+        <option value="">Kaikki kategoriat</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
       <input type="submit" value="Hae" />
     </p>
   </form>
@@ -70,5 +76,6 @@
 </body>
 
 </html>
+
 
 

@@ -11,8 +11,11 @@ app.secret_key = config.secret_key
 @app.route("/")
 def index():
     query = request.args.get("q", "").strip()
-    all_items = items.get_items(query)
-    return render_template("index.html", items=all_items, query=query)
+    category_id_str = request.args.get("category", "").strip()
+    category_id = int(category_id_str) if category_id_str.isdigit() else None
+    categories = items.get_categories()
+    all_items = items.get_items(query, category_id)
+    return render_template("index.html", items=all_items, query=query, categories=categories, selected_category=category_id)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
@@ -244,5 +247,4 @@ def logout():
     session.pop("user_id", None)
     session.pop("username", None)
     return redirect("/")
-
 

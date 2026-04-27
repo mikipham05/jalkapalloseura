@@ -8,22 +8,23 @@ def add_item(title, description, event_date, start_time, user_id, category_ids=N
     set_item_categories(item_id, category_ids or [])
 
 
-def get_items(search_term=None):
-    if not search_term:
-        sql = "SELECT id, title FROM items ORDER BY id DESC"
-        return db.query(sql)
-
-    sql = """SELECT DISTINCT items.id, items.title FROM items
+def get_items(search_term=None, category_id=None):
+    conditions = []
+    params = []
+    if search_term:
+        conditions.append("(items.title LIKE ? OR items.description LIKE ? OR items.start_time LIKE ? OR items.event_date LIKE ? OR categories.name LIKE ?)")
+        wildcard = f"%{search_term}%"
+        params.extend([wildcard] * 5)
+    if category_id:
+        conditions.append("item_categories.category_id = ?")
+        params.append(category_id)
+    where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+    sql = f"""SELECT DISTINCT items.id, items.title FROM items
              LEFT JOIN item_categories ON items.id = item_categories.item_id
              LEFT JOIN categories ON item_categories.category_id = categories.id
-             WHERE items.title LIKE ?
-               OR items.description LIKE ?
-               OR items.start_time LIKE ?
-               OR items.event_date LIKE ?
-               OR categories.name LIKE ?
+             {where_clause}
              ORDER BY items.id DESC"""
-    wildcard = f"%{search_term}%"
-    return db.query(sql, [wildcard, wildcard, wildcard, wildcard, wildcard])
+    return db.query(sql, params)
 
 
 def get_item(item_id):
@@ -172,4 +173,3 @@ def set_user_response(item_id, user_id, response):
     except Exception:
         sql = "UPDATE responses SET response = ? WHERE item_id = ? AND user_id = ?"
         db.execute(sql, [response, item_id, user_id])
-

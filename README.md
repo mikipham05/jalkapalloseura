@@ -9,6 +9,7 @@ Tämän hetkiset toiminnot:
 * Käyttäjä näkee sovellukseen lisätyt ilmoitukset ja pystyy suodattamaan niitä haluamansa kategorian mukaan.
 * Hakutoiminto jolla voi etsiä haluamalla hakusanalla tai kategorialla.
 * Käyttäjä pystyy ilmoittautumaan mukaan johonkin ilmoitukseen ja nähdä kuinka monta muuta on ilmoittautunut mukaan tai pois.
+* Käyttäjäsivut missä näkyy kyseisen käyttäjän lisättyjen lisätietojen ja ilmoitusten määrän sekä ilmoitukset ylipäätään.
 
 
 Sovelluksen testausohjeet alla: 

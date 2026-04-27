@@ -118,8 +118,9 @@ def user_page(username):
         abort(404)
 
     user_items = items.get_items_by_user(user["id"])
+    comments = items.get_comments_by_user(user["id"])
     stats = items.get_user_stats(user["id"])
-    return render_template("user.html", user=user, items=user_items, stats=stats)
+    return render_template("user.html", user=user, items=user_items, stats=stats, comments=comments)
 
 @app.route("/new_item")
 def new_item():

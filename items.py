@@ -134,16 +134,23 @@ def get_items_by_user(user_id):
     return db.query(sql, [user_id])
 
 
+def get_comments_by_user(user_id):
+    sql = """SELECT comments.id, comments.content, comments.created_at,
+                   items.title AS item_title, items.id AS item_id
+             FROM comments
+             JOIN items ON comments.item_id = items.id
+             WHERE comments.user_id = ?
+             ORDER BY comments.created_at DESC"""
+    return db.query(sql, [user_id])
+
+
 def get_user_stats(user_id):
-    sql = """SELECT
-               COUNT(DISTINCT items.id) AS item_count,
-               COUNT(comments.id) AS comment_count
-             FROM users
-             LEFT JOIN items ON items.user_id = users.id
-             LEFT JOIN comments ON comments.user_id = users.id
-             WHERE users.id = ?"""
-    results = db.query(sql, [user_id])
-    return results[0] if results else {"item_count": 0, "comment_count": 0}
+    item_count_result = db.query("SELECT COUNT(*) AS count FROM items WHERE user_id = ?", [user_id])
+    comment_count_result = db.query("SELECT COUNT(*) AS count FROM comments WHERE user_id = ?", [user_id])
+    return {
+        "item_count": item_count_result[0]["count"] if item_count_result else 0,
+        "comment_count": comment_count_result[0]["count"] if comment_count_result else 0
+    }
 
 
 def get_response_counts(item_id):
@@ -173,3 +180,4 @@ def set_user_response(item_id, user_id, response):
     except Exception:
         sql = "UPDATE responses SET response = ? WHERE item_id = ? AND user_id = ?"
         db.execute(sql, [response, item_id, user_id])
+

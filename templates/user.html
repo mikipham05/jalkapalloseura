@@ -8,7 +8,7 @@
 <body>
   <h1>Käyttäjä {{ user.username }}</h1>
   <p>Lisättyjä ilmoituksia: {{ stats.item_count }}</p>
-  <p>Lisättyjä lisätietoja: {{ stats.comment_count }}</p>
+  <p>Lisättyjä kommentteja: {{ stats.comment_count }}</p>
 
   <h2>Käyttäjän ilmoitukset</h2>
   {% if items %}
@@ -19,6 +19,17 @@
   </ul>
   {% else %}
   <p>Tällä käyttäjällä ei vielä ole ilmoituksia.</p>
+  {% endif %}
+
+  <h2>Käyttäjän kommentit</h2>
+  {% if comments %}
+  <ul>
+    {% for comment in comments %}
+    <li><a href="/item/{{ comment.item_id }}">{{ comment.item_title }}</a>: {{ comment.content }} ({{ comment.created_at }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Tällä käyttäjällä ei vielä ole kommentteja.</p>
   {% endif %}
 
   <p><a href="/">Takaisin etusivulle</a></p>

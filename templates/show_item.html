@@ -12,6 +12,7 @@
     <a href="/edit_item/{{ item.id }}">Muokkaa</a>
   </p>
   <form action="/delete_item" method="post" style="display:inline;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="item_id" value="{{ item.id }}" />
     <button type="submit">Poista ilmoitus</button>
   </form>
@@ -30,6 +31,7 @@
   </p>
   {% if session.user_id %}
   <form action="/item/{{ item.id }}/response" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <p>
       Osallistun: <br />
       <label><input type="radio" name="response" value="IN" {% if current_response == 'IN' %}checked{% endif %}> In</label>
@@ -54,6 +56,7 @@
       <strong>{{ comment.username }}</strong> ({{ comment.created_at }}): {{ comment.content }}
       {% if session.user_id == comment.user_id %}
       <form action="/comment/{{ comment.id }}/delete" method="post" style="display:inline; margin-left:1rem;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <button type="submit">Poista</button>
       </form>
       <a href="/comment/{{ comment.id }}/edit">Muokkaa</a>
@@ -66,6 +69,7 @@
   {% endif %}
   {% if session.user_id %}
   <form action="/item/{{ item.id }}/comment" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <p>
       Lisää kommentti:<br />
       <textarea name="content" rows="4" cols="60"></textarea>

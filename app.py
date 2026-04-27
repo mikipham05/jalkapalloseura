@@ -4,9 +4,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
 import items
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.context_processor
+def inject_csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(16)
+    return dict(csrf_token=session['csrf_token'])
+
+def check_csrf():
+    token = request.form.get('csrf_token')
+    if not token or token != session.get('csrf_token'):
+        abort(403)
 
 @app.route("/")
 def index():
@@ -31,6 +43,7 @@ def show_item(item_id):
 
 @app.route("/item/<int:item_id>/comment", methods=["POST"])
 def add_item_comment(item_id):
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -46,6 +59,7 @@ def add_item_comment(item_id):
 
 @app.route("/item/<int:item_id>/response", methods=["POST"])
 def add_item_response(item_id):
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -72,6 +86,7 @@ def edit_comment(comment_id):
         return "Ei oikeuksia muokata tätä kommenttia", 403
 
     if request.method == "POST":
+        check_csrf()
         content = request.form.get("content", "").strip()
         if not content:
             return "Kommentti ei voi olla tyhjä", 400
@@ -82,6 +97,7 @@ def edit_comment(comment_id):
 
 @app.route("/comment/<int:comment_id>/delete", methods=["POST"])
 def delete_comment(comment_id):
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -115,6 +131,7 @@ def new_item():
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -150,6 +167,7 @@ def edit_item(item_id):
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -176,6 +194,7 @@ def update_item():
 
 @app.route("/delete_item", methods=["POST"])
 def delete_item():
+    check_csrf()
     if "user_id" not in session:
         return redirect("/login")
 
@@ -201,6 +220,7 @@ def register():
 
 @app.route("/create", methods=["POST"])
 def create():
+    check_csrf()
     username = request.form.get("username", "").strip()
     password1 = request.form.get("password1", "")
     password2 = request.form.get("password2", "")
@@ -227,6 +247,7 @@ def login():
             return redirect("/")
         return render_template("login.html")
 
+    check_csrf()
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
 
